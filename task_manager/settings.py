@@ -86,12 +86,12 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'NAME': 'task_manager',
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'PORT': '5432',  # Default port for PostgreSQL
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
+        "NAME": os.environ.get("DATABASE_NAME", "task_manager"),
+        "USER": os.environ.get("DATABASE_USER", "postgres"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "postgres"),
+        "PORT": int(os.environ.get("DATABASE_PORT", "5432")),
     }
 }
 
