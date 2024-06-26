@@ -5,7 +5,7 @@ services:
   web:
     build: .
     volumes:
-      - ./task_manager:/app
+      - ./task_manager:/app  # Mount task_manager directory as application code
     ports:
       - "8000:8000"
     depends_on:
@@ -16,7 +16,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: task_manager
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: password  # Consider using environment variables for passwords in production
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -29,7 +29,7 @@ services:
   # Multiple Celery worker services (scale as needed)
   worker1:
     build: .
-    command: celery -A task_manager worker -l info
+    command: celery -A task_manager worker -l info  # Run Celery worker with project name
     depends_on:
       - web
       - db

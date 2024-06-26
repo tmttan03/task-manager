@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tasks',
     'widget_tweaks',
+    'celery',
+    'celery.backends.redis',
 ]
+
+# INSTALLED_APPS = MAIN_APPS
+# INSTALLED_APPS += [
+#     'widget_tweaks',
+# ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,11 +86,13 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PORT': '5432',  # Default port for PostgreSQL
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -136,13 +146,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # CELERY
-CELERY_BROKER_URL = 'redis://localhost:6379'  # Replace with your message broker URL (Redis or RabbitMQ)
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'  # Replace with your message broker URL
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_BEAT_SCHEDULE = {
-  'check_completed_tasks': {
-    'task': 'tasks.check_completed_tasks',
-    'schedule': crontab(minute='*'),  # Runs every minute
-  },
-}
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Optional: Configuration for Celery Beat (separate process)
+CELERY_BEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+
+try:
+    from .local import *
+except ImportError as e:
+    if 'local' not in str(e):
+        raise e
