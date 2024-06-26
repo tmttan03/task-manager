@@ -1,0 +1,27 @@
+<header>
+    <div class="container-fluid">
+      <div class="border-bottom p-4">
+        <div class="row align-items-center">
+          <div class="col-sm col-12">
+            <!-- Title -->
+            <a href="{% url 'tasks:task_list' %}" class="btn btn-link">
+                <h1 class="h2 ls-tight">
+                    Tasks
+                </h1>
+            </a>
+          </div>
+          <!-- Actions -->
+          <div class="col-sm-auto col-12 mt-4 mt-sm-0">
+            <div class="hstack gap-2 justify-content-sm-end">
+              <a href="{% url 'tasks:task_create' %}" class="btn btn-sm btn-primary">
+                <span class="pe-2">
+                  <i class="fas fa-plus m-r-10 menu-icon" aria-hidden="true"></i>
+                </span>
+                <span>Create</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>

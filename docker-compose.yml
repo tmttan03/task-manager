@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  # Django web service
+  web:
+    build: .
+    volumes:
+      - ./task_manager:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  # PostgreSQL database
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: task_manager
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis service (for Celery)
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  # Multiple Celery worker services (scale as needed)
+  worker1:
+    build: .
+    command: celery -A task_manager worker -l info
+    depends_on:
+      - web
+      - db
+      - redis
+
+  worker2:  # Add additional worker services here (worker3, worker4, etc.)
+    build: .
+    command: celery -A task_manager worker -l info
+    depends_on:
+      - web
+      - db
+      - redis
+
+  # Celery Beat service
+  beat:
+    build: .
+    command: celery -A task_manager beat -l info
+    depends_on:
+      - web
+      - db
+      - redis
+
+volumes:
+  postgres_data: {}

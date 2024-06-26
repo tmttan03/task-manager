@@ -1,0 +1,195 @@
+{% load static  %}
+{% comment %} <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+
+        <li class="nav-item {% if request.resolver_match.url_name == 'task_list' %}active{% endif %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'task_list' %}active{% endif %}" href="{% url 'tasks:task_list' %}">
+                <i class="fas fa-home menu-icon"></i>
+                <span class="menu-title">Tasks</span>
+            </a>
+        </li>
+
+        <li class="nav-item {% if request.resolver_match.url_name == 'task_create' %}active{% endif %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'task_create' %}active{% endif %}" href="{% url 'tasks:task_create' %}">
+                <i class="fas fa-plus m-r-10 menu-icon" aria-hidden="true"></i></i>
+                <span class="menu-title">Create New Task</span>
+            </a>
+        </li>
+
+    </ul>
+</nav> {% endcomment %}
+
+
+  <!-- Sidebar -->
+  <nav class="navbar show navbar-vertical h-lg-screen navbar-expand-lg px-0 py-3 navbar-light bg-white border-bottom border-bottom-lg-0 border-end-lg scrollbar" id="sidebar">
+    <div class="container-fluid">
+      <!-- Toggler -->
+      <button class="navbar-toggler ms-n2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Brand -->
+      <a class="navbar-brand d-inline-block py-lg-2 mb-lg-5 px-lg-6 me-0" href="/">
+        <img src="{% static 'images/logo.png' %}" alt="...">
+      </a>
+
+      <!-- Collapse -->
+      <div class="collapse navbar-collapse" id="sidebarCollapse">
+        <!-- Navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="#sidebar-projects" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-projects">
+              <i class="bi bi-briefcase"></i>
+              Projects
+            </a>
+            <div class="collapse show" id="sidebar-projects">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Overview
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Grid View
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link font-bold">
+                    Table View
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Details
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Create Project
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#sidebar-tasks" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-tasks">
+              <i class="bi bi-kanban"></i>
+              Tasks
+            </a>
+            <div class="collapse" id="sidebar-tasks">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Overview
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    List View
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    List View w/ Details
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Board View
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Create Task
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#sidebar-files" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-files">
+              <i class="bi bi-file-earmark-text"></i>
+              Files
+            </a>
+            <div class="collapse" id="sidebar-files">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Overview
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Table View
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Media Gallery
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#sidebar-integrations" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-integrations">
+              <i class="bi bi-terminal"></i>
+              Integrations
+            </a>
+            <div class="collapse" id="sidebar-integrations">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Applications
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Manage Apps
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#sidebar-settings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-settings">
+              <i class="bi bi-gear"></i>
+              Settings
+            </a>
+            <div class="collapse" id="sidebar-settings">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    General
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Security
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Team
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Billing
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    Notifications
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <!-- Divider -->
+        <hr class="navbar-divider my-4 opacity-70">
+
+      </div>
+    </div>
+  </nav>
