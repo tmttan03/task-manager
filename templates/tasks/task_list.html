@@ -16,15 +16,20 @@
             <div class="list-group-item py-3">
               <div class="row g-3 align-items-center">
                 <div class="col-sm-6 col-12 d-flex">
-                  <div class="form-check form-check-linethrough">
-                    <input class="form-check-input w-5 h-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="check-new-tasks-{{ task.id }}">
-                    <a class="form-check-label font-regular ms-2" data-bs-toggle="offcanvas">
-                      {{ task.title }}
-                    </a>
-                    <p class="text-muted">
-                      {{ task.description }}
-                    </p>
-                  </div>
+                  <form method="POST" id="task-form-{{ task.id }}" action="{% url 'tasks:update_task_complete' pk=task.id %}">
+                    {% csrf_token %}
+                    <div class="form-check form-check-linethrough">
+                      <input name="completed-{{task.id}}" class="form-check-input w-5 h-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="completed-{{ task.id }}" onchange="updateTask(this, {{ task.id }})" {% if task.completed %} checked="checked" {% endif %}>
+
+                      <a class="form-check-label font-regular ms-2" data-bs-toggle="offcanvas">
+                        {{ task.title }}
+                      </a>
+                      <p class="text-muted">
+                        {{ task.description }}
+                      </p>
+                      <button type="submit" style="display: none;"></button>
+                    </div>
+                  </form>
                 </div>
                 <div class="col-sm-auto col-12 ms-sm-auto">
                   <div class="hstack gap-5 justify-content-end">
