@@ -14,9 +14,6 @@ services:
   # PostgreSQL database
   db:
     image: postgres:latest
-    environment:
-      POSTGRES_DB: task_manager
-      POSTGRES_PASSWORD: password  # Consider using environment variables for passwords in production
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

@@ -14,6 +14,9 @@ COPY . .
 # Apply database migrations (assuming PostgreSQL)
 RUN python manage.py makemigrations && python manage.py migrate
 
+# Create initial superuser
+RUN python manage.py loaddata data/initial.json
+
 # Expose Django port
 EXPOSE 8000
 
