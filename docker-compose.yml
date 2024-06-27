@@ -1,13 +1,19 @@
 version: "3.8"
 
 services:
-  # Django web service
+  # Django web service (using environment variables for database)
   web:
     build: .
     volumes:
-      - ./task_manager:/app  # Mount task_manager directory as application code
+      - ./:/app  # Mount task_manager directory as application code
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_HOST=postgres  # Set database host to service name
+      - POSTGRES_PORT=5432  # Optional, assuming default port
+      - DATABASE_USER=${DATABASE_USER}  # Replace with your credentials
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
     depends_on:
       - db
 
@@ -27,6 +33,9 @@ services:
   worker1:
     build: .
     command: celery -A task_manager worker -l info  # Run Celery worker with project name
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0  # Result backend for Redis
     depends_on:
       - web
       - db
@@ -35,6 +44,9 @@ services:
   worker2:  # Add additional worker services here (worker3, worker4, etc.)
     build: .
     command: celery -A task_manager worker -l info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0  # Result backend for Redis
     depends_on:
       - web
       - db
@@ -44,6 +56,8 @@ services:
   beat:
     build: .
     command: celery -A task_manager beat -l info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
     depends_on:
       - web
       - db

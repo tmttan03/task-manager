@@ -43,13 +43,6 @@ INSTALLED_APPS = [
     'celery.backends.redis',
 ]
 
-# INSTALLED_APPS = MAIN_APPS
-# INSTALLED_APPS += [
-#     'widget_tweaks',
-# ]
-
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,14 +77,15 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
-        "NAME": os.environ.get("DATABASE_NAME", "task_manager"),
-        "USER": os.environ.get("DATABASE_USER", "postgres"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "postgres"),
-        "PORT": int(os.environ.get("DATABASE_PORT", "5432")),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': 'postgres' if os.environ.get('DATABASE_HOST') else 'localhost',  # Adjust for Docker Compose
+        'PORT': 5432,
     }
 }
 

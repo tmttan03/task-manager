@@ -4,7 +4,7 @@ FROM python:3.11-slim-buster
 # Set working directory
 WORKDIR /app
 
-# Copy requirements.txt and install dependencies
+# Copy requirements.txt and install dependencies (separate for Django and Celery)
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
@@ -29,7 +29,8 @@ RUN python manage.py loaddata data/initial.json
 # Expose Django port
 EXPOSE 8000
 
-# Run Gunicorn as the main process
+# Install additional packages for Celery workers and beat
+RUN apt-get update && apt-get install -y redis-server  # Install Redis server
+
+# Main process (assuming web service)
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "task_manager.wsgi:application"]
-
-
