@@ -1,0 +1,13 @@
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'task_manager',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'postgres',  # Adjust for Docker Compose
+        'PORT': 5432,
+    }
+}

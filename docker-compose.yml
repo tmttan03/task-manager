@@ -5,23 +5,46 @@ services:
   django:
     build: .
     volumes:
-      - .:/app  # Mount your Django app directory as a volume
+      - .:/app
     ports:
-      - "8000:8000"  # Map container port 8000 to host port 8000
+      - "8000:8000"
     environment:
       # Set environment variables for database connection details
       POSTGRES_HOST: postgres
-      POSTGRES_USER: postgres  # Replace if using a different username
-      POSTGRES_PASSWORD: password  # Replace with your actual password
-      POSTGRES_DB: task_manager  # Replace with your database name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_manager
 
-  # Postgres database service (optional)
+  # Postgres database service
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: password  # Set an environment variable for the password
+      POSTGRES_PASSWORD: password
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # Persistent storage for Postgres data
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis service
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+
+  # Celery Beat service
+  celery-beat:
+    build: .
+    command: celery -A task_manager beat -l info
+    depends_on:
+      - redis
+
+  # Celery Worker service (multiple processes)
+  celery-worker:
+    build: .
+    command: celery -A task_manager worker -l info -c 2
+    depends_on:
+      - redis
+      - django
+      - postgres
 
 volumes:
   postgres_data: {}
+  redis_data: {}

@@ -5,7 +5,7 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'task_manager.settings')
 
-app = Celery('task_manager', broker='redis://localhost:6379')
+app = Celery('task_manager', broker=settings.CELERY_BROKER_URL)
 
 app.config_from_object('django.conf:settings')
 

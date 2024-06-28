@@ -33,12 +33,11 @@ def update_task_complete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
     if request.method == 'POST':
-      completed = request.POST.get('completed', False).lower() == 'true'  # Convert to lowercase for comparison
-      completed = completed in ('true', 'on', 1)  # Check for common representations of True
+      completed = request.POST.get('completed', False).lower() == 'true'
+      completed = completed in ('true', 'on', 1)
       task.completed = bool(completed)
       task.save()
 
-      # Redirect to the task list page (or desired success URL)
       return JsonResponse({'message': 'Task updated successfully.'})
     context = {'task': task}
     return render(request, 'tasks/task_list.html', context)
