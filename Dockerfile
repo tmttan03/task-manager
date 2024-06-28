@@ -1,36 +1,22 @@
-# Use official Python base image
-FROM python:3.11-slim-buster
+# Base image for the Django application (choose a suitable Python version)
+FROM python:3.11.4-slim-bullseye
 
-# Set working directory
+# Set working directory within the container
 WORKDIR /app
 
-# Copy requirements.txt and install dependencies (separate for Django and Celery)
+# Copy requirements.txt and install dependencies
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+
+RUN apt-get update && apt-get install -y postgresql-client
 
 # Copy project code
 COPY . .
 
-# Use environment variables in configuration file
-ENV DJANGO_SETTINGS_MODULE=task_manager.settings
+ENTRYPOINT ["/bin/bash", "/app/docker-entrypoint.sh"]
 
-# Inject environment variables from .env (using sed)
-RUN sed -i "s/DATABASE_HOST=.*/DATABASE_HOST=${DATABASE_HOST}/" task_manager/settings.py
-RUN sed -i "s/DATABASE_USER=.*/DATABASE_USER=${DATABASE_USER}/" task_manager/settings.py
-RUN sed -i "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=${DATABASE_PASSWORD}/" task_manager/settings.py
-RUN sed -i "s/DATABASE_NAME=.*/DATABASE_NAME=${DATABASE_NAME}/" task_manager/settings.py
-
-# Apply database migrations (assuming PostgreSQL)
-RUN python manage.py makemigrations && python manage.py migrate
-
-# Create initial superuser
-RUN python manage.py loaddata data/initial.json
-
-# Expose Django port
+# Expose the Django development port (default: 8000)
 EXPOSE 8000
 
-# Install additional packages for Celery workers and beat
-RUN apt-get update && apt-get install -y redis-server  # Install Redis server
-
-# Main process (assuming web service)
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "task_manager.wsgi:application"]
+# Command to run the Django application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

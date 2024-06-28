@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': 'postgres' if os.environ.get('DATABASE_HOST') else 'localhost',  # Adjust for Docker Compose
+        'NAME': os.environ.get('DATABASE_NAME', 'task_manager'),
+        'USER': os.environ.get('DATABASE_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'password'),
+        'HOST': 'postgres',  # Adjust for Docker Compose
         'PORT': 5432,
     }
 }

@@ -1,67 +1,27 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  # Django web service (using environment variables for database)
-  web:
+  # Django application service
+  django:
     build: .
     volumes:
-      - ./:/app  # Mount task_manager directory as application code
+      - .:/app  # Mount your Django app directory as a volume
     ports:
-      - "8000:8000"
+      - "8000:8000"  # Map container port 8000 to host port 8000
     environment:
-      - DATABASE_HOST=postgres  # Set database host to service name
-      - POSTGRES_PORT=5432  # Optional, assuming default port
-      - DATABASE_USER=${DATABASE_USER}  # Replace with your credentials
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_NAME=${DATABASE_NAME}
-    depends_on:
-      - db
+      # Set environment variables for database connection details
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres  # Replace if using a different username
+      POSTGRES_PASSWORD: password  # Replace with your actual password
+      POSTGRES_DB: task_manager  # Replace with your database name
 
-  # PostgreSQL database
-  db:
+  # Postgres database service (optional)
+  postgres:
     image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: password  # Set an environment variable for the password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  # Redis service (for Celery)
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-
-  # Multiple Celery worker services (scale as needed)
-  worker1:
-    build: .
-    command: celery -A task_manager worker -l info  # Run Celery worker with project name
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0  # Result backend for Redis
-    depends_on:
-      - web
-      - db
-      - redis
-
-  worker2:  # Add additional worker services here (worker3, worker4, etc.)
-    build: .
-    command: celery -A task_manager worker -l info
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0  # Result backend for Redis
-    depends_on:
-      - web
-      - db
-      - redis
-
-  # Celery Beat service
-  beat:
-    build: .
-    command: celery -A task_manager beat -l info
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0  # Broker URL for Redis
-    depends_on:
-      - web
-      - db
-      - redis
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage for Postgres data
 
 volumes:
   postgres_data: {}

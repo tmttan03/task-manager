@@ -3,95 +3,46 @@
 This repository provides a well-structured Django web application for managing tasks, including basic CRUD (Create, Read, Update, Delete) functionalities. It leverages Celery for asynchronous tasks and benefits from a Docker environment for streamlined deployment.
 
 Requirements:
-- Python >= 3.9.18
-- pip (package installer)
-- Docker Desktop (or a compatible container runtime)
 
-## Set up Instructions
+- Python: Version 3.9.18 or later (check with python3 --version or python --version)
+- pip: Package manager for Python (usually comes bundled with Python)
+- ocker Desktop: Container runtime environment (or a compatible alternative like Podman)
 
-1. Clone project
+# Installation and Setup:
 
+1. Clone the Repository:
+
+Open your terminal or command prompt and navigate to your desired project directory. Then, execute the following command to clone the repository from GitHub:
 ```
 git clone git@github.com:Codev-Team-O/job-board-backend.git
 ```
 
-2. Set up virtual environment (2 ways)
+2. Set Up Database Environment:
 
-- Using virtualenv
-
+**Create a copy of the .env.example file:**
 ```
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+cp .env.example .env
 ```
+Edit the .env file using a text editor and replace the placeholder values (e.g., database name, username, password) with your actual PostgreSQL database configuration details.
 
-- Using pyenv
+3. Build and Run with Docker:
 
-```
-pyenv install 3.9.18
-pyenv virtualenv 3.9.18 venv
-pyenv local venv
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-3. Set up Environment Variables
-
-- copy the .env.sample and rename it to .env, fill it in with the correct values
-
-4. Migrate the files with
-
-```
-$ python manage.py migrate
-```
-
-5. Run initial fixture data
-
-```
-$ python manage.py loaddata data/initial.json
-```
-
-6. Create super user
-
-```
-$ python manage.py createsuperuser
-```
-
-7. Runserver
-
-```
-$ python manage.py runserver
-```
-
-8. Access the django-admin [http://127.0.0.1:8000/admin/] to add data. Login using the superuser creds.
-
-9. Make sure Redis server is up
-
-10. Run in different terminals
-```
-$ celery -A task_manager beat -l info
-$ celery -A task_manager worker -l info -c 4
-```
-
-- Run using dockerfile
-
-1. Clone the Repository:
-```
-    git clone https://github.com/tmttan03/task-manager.git
-```
-
-2. Run docker build
-
+**Build the Image (Optional):**
 ```
 docker-compose build
 ```
+This step is only necessary if you haven't built the Docker image before. It creates the image that Docker uses to run your application and dependencies.
 
-3. Run docker container
-
+**Start the Application:**
 ```
-docker-compose up
+docker-compose up -d
 ```
+This command starts the application in detached mode (-d), allowing it to run in the background.
 
-4. Access the django-admin [http://127.0.0.1:8000/admin/] to add data.
+**Rebuild and Restart (Development):**
 
+If you make changes to your code and want to see those changes reflected in the running application, use this command:
+```
+docker-compose up --build
+```
+This rebuilds the image with your latest code and restarts the containers.
